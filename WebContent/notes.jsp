@@ -4,6 +4,14 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">   
 </head>
 <body>
+<%
+session=request.getSession(false);
+String username=(String)session.getAttribute("UNM");
+if(username==null || username=="")
+{
+	response.sendRedirect("index.jsp");
+}
+%>
     <%@page import="java.io.*"%>
     <%@page import="java.sql.*"%>
     <%@page import="java.lang.*"%>
@@ -21,6 +29,20 @@
     
     
     <div class="container">
+    
+    <div class="row">
+        		<div class="col-sm-6 col-sm-push-3">
+        			<%  if(null!=request.getAttribute("Message"))
+				    {%>
+				       
+				    <h4><font color="red"><%out.println(request.getAttribute("Message"));%></font></h4>
+				     
+				  <% }%>
+        		</div>
+     </div>
+    
+    
+    
 		<div class="row">
 		
 			<div class="col-sm-2">
@@ -52,7 +74,7 @@
         while(rs.next())
         {   
             
-            String p="F://Final/Stuff/WebContent/File_upload/book/";
+            String p="F://Final/Stuff/WebContent/Upload/book/";
             String pic=rs.getString(1);
             String p3=new String(p+pic+".jpg");
             System.out.println(p3);
@@ -68,7 +90,7 @@
                             fout.write(barr);              
                             fout.close();
                         %>
-			<img src="File_upload\book\<%=pic%>.jpg" alt="<%=rs.getString(5)%>" href="">
+			<img src="Upload/notes/<%=pic%>.jpg" alt="<%=rs.getString(5)%>" href="">
                             <div class="caption">
 				 <a href="./productview.jsp?table=notes&id=<%=rs.getInt(1)%>" ><%= rs.getString(5)%></a>
                             </div>

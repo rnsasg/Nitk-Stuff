@@ -1,7 +1,6 @@
 package narayan;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,8 +18,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    
     public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
@@ -29,18 +26,17 @@ public class LoginServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 		
 		
 		response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
 		String uname=(String)request.getParameter("uname");
         String pwd=(String)request.getParameter("pwd");
         String role=(String)request.getParameter("role");
         
         
        try{   
-           ResultSet rs; 
+           	ResultSet rs; 
             Class.forName("oracle.jdbc.driver.OracleDriver");  
             Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","narayan","sah");
             System.out.println(role);
@@ -60,15 +56,13 @@ public class LoginServlet extends HttpServlet {
                                     con.close();
                                     RequestDispatcher rd=request.getRequestDispatcher("home.jsp");  
                                     rd.forward(request, response);
-                                    //response.sendRedirect("home.jsp");
                                }
                   else
                   {
                       con.close();
-                      //response.sendRedirect("index.jsp");
-                      out.println("Invalid login");
-                      RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
-                      rd.include(request, response);
+                      request.setAttribute("Message", "Users id or password not exist");
+                      RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+                      rd.forward(request, response);
                   }
 
             } 
@@ -93,18 +87,18 @@ public class LoginServlet extends HttpServlet {
                   else
                   {
                       con.close();
-                     // response.sendRedirect("index.jsp");
-                      
-                      out.println("Invalid login");
-                      RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
-                      rd.include(request, response);
+                      request.setAttribute("Message", "Admin id or password not exist ");
+                      RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+                      rd.forward(request, response);
                   }
 
             }
             }catch(Exception e){
+            	
                e.printStackTrace();
-               System.out.println("Failed");
-               response.sendRedirect("index.jsp");
+               request.setAttribute("Message", "Exception in login");
+               RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+               rd.forward(request, response);
             }
 	}
 

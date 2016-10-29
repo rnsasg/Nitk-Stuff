@@ -21,7 +21,19 @@
         <div class="container-fluid">
                <jsp:include page="homemenu.jsp"></jsp:include>                
         </div>
+       
         <div class="container-fluid">
+        
+         <div class="row">
+        		<div class="col-sm-6 col-sm-push-3">
+        			<%  if(null!=request.getAttribute("Message"))
+				    {%>
+				       
+				    <h4><font color="red"><%out.println(request.getAttribute("Message"));%></font></h4>
+				     
+				  <% }%>
+        		</div>
+        	</div>
             
             <form  method="post" action="forgotpwd.jsp">
             <div class="row" id="mydiv">
@@ -35,11 +47,12 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group" >	
-					<input type="text" name="uname" class="form-control"  placeholder="Enter User name"/><br/>
-                                        <input type="email" name="email" class="form-control"  placeholder="Enter Your Email Address"/><br/>
-                                        <input type="text" name="mob" class="form-control"  placeholder="Enter Mob No"/><br/>
+										<input type="text" name="uname" class="form-control"  placeholder="Enter User name" pattern="^([0-9]{2})[a-z]{2}([0-9]{2})$" title=" !! Invalid User id !!!" required ><br/>
+                                        <input type="email" name="email" class="form-control"  placeholder="Enter Your Email Address" required><br/>
+                                        <input type="text" name="mob" class="form-control"  placeholder="Enter Mob No" pattern="^([0-9]{10})$" title="Invalid Mobile No" required><br/>
                                         
                                         <input type="submit" class="btn btn-success" value="Submit">
+                                        
                             </div> 	
                         </div>
                     </div>

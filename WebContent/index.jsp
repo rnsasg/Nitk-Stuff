@@ -4,37 +4,26 @@
         <title>Home Page</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body{
-                
-            }
-        </style>
     </head>
     <body >
+    	<jsp:include page="menu.jsp"></jsp:include>
         <div class="container-fluid">
-            
-            <div class="row">
-                <jsp:include page="homemenu.jsp"></jsp:include>
-                
-            </div>
+         <div class="row">
+        		<div class="col-sm-6 col-sm-push-3">
+        			<%  if(null!=request.getAttribute("Message"))
+				    {%>
+				       
+				    <h4><font color="red"><%out.println(request.getAttribute("Message"));%></font></h4>
+				     
+				  <% }%>
+        		</div>
+     		</div>
             
             <div class="row">
                 <jsp:include page="carousel.jsp"></jsp:include>
             </div>
             <br>
-            <div class="row">
-                
-                <div class="col-sm-4">
-                    <jsp:include page="login.jsp"></jsp:include>
-                </div>
-                <div class="col-sm-8">
-                    <jsp:include page="signup.jsp"></jsp:include>
-                </div>
-                
-            </div>
-            <div class="row">
-                <jsp:include page="footer.jsp"></jsp:include>
-            </div>
+             <jsp:include page="footer.jsp"></jsp:include>
         </div>
     </body>
 </html>

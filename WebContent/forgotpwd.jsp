@@ -13,13 +13,13 @@
             String mob=(String)request.getParameter("mob");
             String msg="";
             
-            
+            /*
             
             System.out.println("-----forgot pwd---");
             System.out.println(user);
             System.out.println(mob);
             System.out.println(email);
-            System.out.println("-------------------");
+            System.out.println("-------------------");*/
             
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","narayan","sah");
@@ -36,24 +36,28 @@
                     }
                     else
                     {
-                        msg="!!!!!! Mob no you enter is not registered !!!!";
-                        System.out.println(msg);
-                        response.sendRedirect("./forgotpassword.jsp?msg="+msg);
+                    	msg="!!!!!! Mob no you enter is not registered !!!!";
+                    	request.setAttribute("Message",msg);
+                    	RequestDispatcher rd=request.getRequestDispatcher("forgotpassword.jsp");
+                        rd.forward(request, response);
+                    	
                     }
                 }
                 else
                 {
                    msg="!!!!!! Email you is not registered on your acount !!!!"; 
-                   response.sendRedirect("./forgotpassword.jsp?msg="+msg);
-                   System.out.println(msg);
+                   request.setAttribute("Message",msg);
+               	   RequestDispatcher rd=request.getRequestDispatcher("forgotpassword.jsp");
+                   rd.forward(request, response);
                 }
                 
             }
             else
             {
-                msg="User id is invalid try again";
-               System.out.println(msg);
-                response.sendRedirect("./forgotpassword.jsp?msg="+msg);               
+                msg="User id is not exist try again";
+                request.setAttribute("Message",msg);
+            	RequestDispatcher rd=request.getRequestDispatcher("forgotpassword.jsp");
+                rd.forward(request, response);            
             }
 
         %>

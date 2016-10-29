@@ -2,7 +2,7 @@ package store;
 
 import java.io.IOException;
 
-
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,12 +29,11 @@ public class BookEntry extends HttpServlet {
    
     public BookEntry() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		 String bname = null;
@@ -50,8 +49,7 @@ public class BookEntry extends HttpServlet {
 	        PreparedStatement pst = null;
 	        Connection con = null;
 	        
-	        response.setContentType("text/html;charset=UTF-8");
-	       
+	        response.setContentType("text/html;charset=UTF-8");      
 	      
 	        
 	        HttpSession session=request.getSession();
@@ -61,12 +59,12 @@ public class BookEntry extends HttpServlet {
 	        date=new java.sql.Date(millis);
 	        
 	        try {
-	                
+	        		
 
 	                boolean isMultiPart = ServletFileUpload.isMultipartContent(request);
 	                if (isMultiPart) {
 	                    
-	                    FileItemFactory factory = new DiskFileItemFactory();
+	                    FileItemFactory factory = new DiskFileItemFactory();	                    
 	                    ServletFileUpload upload = new ServletFileUpload(factory);
 	                    List<FileItem> items = upload.parseRequest(request);
 	                    Iterator<FileItem> iter = items.iterator();
@@ -110,9 +108,9 @@ public class BookEntry extends HttpServlet {
 	               ds.setPassword("sah");
 	               PooledConnection pc=ds.getPooledConnection();
 	               con=pc.getConnection();
-	                Statement st=con.createStatement();
-	                pst=con.prepareStatement("insert into book values(?,?,?,?,?,?,?,?,?,?,?)");
-	                ResultSet rs=st.executeQuery("select * from book");
+	               Statement st=con.createStatement();
+	               pst=con.prepareStatement("insert into book values(?,?,?,?,?,?,?,?,?,?,?)");
+	               ResultSet rs=st.executeQuery("select * from book");
 	                
 	                int count=1;
 	                while(rs.next())
@@ -135,7 +133,10 @@ public class BookEntry extends HttpServlet {
 	                con.commit();
 	                System.out.println(rows);
 	                if (rows > 0) {
-	                    response.sendRedirect("bookentry.jsp");
+	                    
+	                    request.setAttribute("Message", "Record save successfully");
+	                    RequestDispatcher rd = request.getRequestDispatcher("book.jsp");
+	                    rd.forward(request, response);
 	                } 
 	                
 	            }
@@ -144,7 +145,10 @@ public class BookEntry extends HttpServlet {
 	        catch (Exception ex)
 	        {
 	            System.out.println(ex.getMessage());
-	            response.sendRedirect("bookentry.jsp");            
+	            response.sendRedirect("bookentry.jsp");
+                request.setAttribute("Message", "Record not saved");
+                RequestDispatcher rd = request.getRequestDispatcher("book.jsp");
+                rd.forward(request, response);         
 	        }  
 		
 	}

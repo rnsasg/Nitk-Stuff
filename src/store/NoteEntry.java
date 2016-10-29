@@ -3,6 +3,8 @@ package store;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -114,7 +116,7 @@ public class NoteEntry extends HttpServlet {
                 pst=con.prepareStatement("insert into notes values(?,?,?,?,?,?,?,?,?,?)");
                 ResultSet rs=st.executeQuery("select * from notes");
                 
-                int count=0;
+                int count=1;
                 while(rs.next())
                     count++;
                 rs.close();
@@ -134,13 +136,19 @@ public class NoteEntry extends HttpServlet {
                 con.commit();
                 System.out.println(rows);
                 if (rows > 0) {
-                    response.sendRedirect("notesentry.jsp");
+                    
+                    request.setAttribute("Message", "Record save successfully");
+                    RequestDispatcher rd = request.getRequestDispatcher("notes.jsp");
+                    rd.forward(request, response);
                 } 
                 
             }
         } catch (Exception ex) {
+        	
              System.out.println(ex.getMessage());
-            response.sendRedirect("notesentry.jsp");
+             request.setAttribute("Message", "Record noted saved");
+             RequestDispatcher rd = request.getRequestDispatcher("notes.jsp");
+             rd.forward(request, response);
             
         } finally {
             

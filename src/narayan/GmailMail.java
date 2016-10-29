@@ -12,8 +12,8 @@ import javax.mail.internet.MimeMessage;
 
 public class GmailMail {    
     
-    final String from="feedbackproject121@gmail.com";
-    final String pwd="nayyar7@";
+    final String from="roushannarayansah@gmail.com";
+    final String pwd="Rou&h@n0$@h";
         
     public String msgSend(String to,String sub,String msg)
     {

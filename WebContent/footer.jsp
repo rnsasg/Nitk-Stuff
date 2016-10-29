@@ -12,7 +12,7 @@
     <body>
         <div>
             <div class="navbar navbar-default">
-                 <a class="nav-item btn btn-link" href="#">About</a>
+                 <a class="nav-item btn btn-link" href="aboutus.jsp">About</a>
                 <a class="nav-item btn btn-link" href="#">Contact Us</a>
                 <a class="nav-item btn btn-link" href="./feedback.jsp">Feedback</a>
                 <form class="form-inline navbar-form  navbar-right">

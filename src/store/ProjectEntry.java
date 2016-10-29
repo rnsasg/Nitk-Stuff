@@ -2,6 +2,8 @@ package store;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -140,19 +142,26 @@ public class ProjectEntry extends HttpServlet {
                 
                 System.out.println(rows);
                 if (rows > 0) {
-                    response.sendRedirect("projectentry.jsp");
+                	
+                	
+                    request.setAttribute("Message", "Record save successfully");
+                    RequestDispatcher rd = request.getRequestDispatcher("project.jsp");
+                    rd.forward(request, response);
+                   
                 } 
                 
             }
         } catch (Exception ex) {
-            System.out.println("Error");
+            
             System.out.println(ex.getMessage());
-            //response.sendRedirect("./projectentry.jsp");
+            request.setAttribute("Message", "Record not saved");
+            RequestDispatcher rd = request.getRequestDispatcher("project.jsp");
+            rd.forward(request, response);
             
         } finally {
             
             try {
-                System.out.println("Error3"); 
+                 
                 con.close();
                 pst.close();
                 out.close();

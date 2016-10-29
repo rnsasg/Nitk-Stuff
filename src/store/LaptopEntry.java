@@ -1,6 +1,8 @@
 package store;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+
 
 
 @WebServlet("/laptopentry")
@@ -127,13 +131,18 @@ public class LaptopEntry extends HttpServlet {
                 int rows = pst.executeUpdate();
                 System.out.println(rows);
                 if (rows > 0) {
-                    response.sendRedirect("laptopentry.jsp");
+                    
+                    request.setAttribute("Message", "Record save successfully");
+                    RequestDispatcher rd = request.getRequestDispatcher("laptop.jsp");
+                    rd.forward(request, response);
                 } 
                 
             }
         } catch (Exception ex) {
             
-            response.sendRedirect("laptopentry.jsp");
+        	request.setAttribute("Message", "Record not saved");
+            RequestDispatcher rd = request.getRequestDispatcher("laptop.jsp");
+            rd.forward(request, response);
         } 
 	}
 

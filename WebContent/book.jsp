@@ -4,6 +4,18 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">   
 </head>
 <body>
+
+
+
+<%
+session=request.getSession(false);
+String username=(String)session.getAttribute("UNM");
+if(username==null || username=="")
+{
+	response.sendRedirect("index.jsp");
+}
+%>
+
     <%@page import="java.io.*"%>
     <%@page import="java.sql.*"%>
     <%@page import="java.lang.*"%>
@@ -11,7 +23,7 @@
         Class.forName("oracle.jdbc.driver.OracleDriver");
         Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","narayan","sah");
         Statement st=con.createStatement();
-        ResultSet rs=st.executeQuery("select * from book");
+        ResultSet rs=st.executeQuery("select * from book where status='true'");
         
     %>
     
@@ -19,6 +31,18 @@
                <jsp:include page="menu.jsp"></jsp:include>               
     </div>
     <div class="container">
+    
+    	<div class="row">
+            	<div class="col-sm-6 col-sm-push-3">
+        			<%  if(null!=request.getAttribute("Message"))
+				    {%>
+				       
+				    <h4><font color="red"><%out.println(request.getAttribute("Message"));%></font></h4>
+				     
+				  <% }%>
+        		</div>
+       </div>
+    
 		<div class="row">
 		
 			<div class="col-sm-2">
@@ -46,7 +70,7 @@
 						        while(rs.next())
 						        {   
 						            
-						            String p="F://Final/Stuff/WebContent/File_upload/book/";
+						            String p="F://Final/Stuff/WebContent/Upload/book/";
 						            String pic=rs.getString(1);
 						            String p3=new String(p+pic+".jpg");
 						            System.out.println(p3);
@@ -62,7 +86,7 @@
 						                            fout.write(barr);              
 						                            fout.close();
 						                        %>
-									<img src="File_upload/book/<%=pic%>.jpg" alt="<%=rs.getString(5)%>" >
+									<img src="Upload/book/<%=pic%>.jpg" alt="<%=rs.getString(5)%>" >
 						                            <div class="caption">
 										<a href="./productview.jsp?table=book&id=<%=rs.getString(1)%>" ><%= rs.getString(5)%></a>
 						                            </div>

@@ -3,27 +3,30 @@
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
+
+<%
+session=request.getSession(false);
+String username=(String)session.getAttribute("UNM");
+if(username==null || username=="")
+{
+	response.sendRedirect("index.jsp");
+}
+%>
+
 <%
    
     String user=(String)session.getAttribute("UNM");
     Class.forName("oracle.jdbc.driver.OracleDriver");
     Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","narayan","sah");
-    
-    
-   Statement st=con.createStatement();
-   ResultSet rs=st.executeQuery("select * from cart where requester='"+user+"' and status='yes'");
-   while(rs.next())
-   {
-        Statement st2=con.createStatement();
-        st2.execute("update "+rs.getString(3)+" set status='true' where id='"+rs.getString(2)+"'");
-   }
-    
-    
-    Statement st3=con.createStatement();
-    st3.execute("delete from cart where requester='"+user+"'");
+    PreparedStatement pst=con.prepareStatement("update cart set cart='false' where requester='"+username+"'");
+    pst.executeUpdate();
     con.commit();
-    con.close();
-   //out.println("Successfully removed");
+    con.close(); 
+    
+    request.setAttribute("Message", "All item removed successfully");
+    RequestDispatcher rd = request.getRequestDispatcher("cart.jsp");
+    rd.forward(request, response);
+  
    response.sendRedirect("cart.jsp");   
 %>
 

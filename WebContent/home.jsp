@@ -4,9 +4,18 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">   
 </head>
 <body>
+<%
+session=request.getSession(false);
+String user=(String)session.getAttribute("UNM");
+if(user==null || user=="")
+{
+	response.sendRedirect("index.jsp");
+}
+
+%>
     <%@page import="java.io.*"%>
     <%@page import="java.sql.*"%>
-    <%@page import="java.lang.*"%>
+    <%@page import="java.lang.*"%> 
     <%
         Class.forName("oracle.jdbc.driver.OracleDriver");
         Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","narayan","sah");
@@ -23,7 +32,7 @@
     
      <jsp:include page="menu.jsp"></jsp:include>
      
-    <form method="get" action="./productview.jsp">
+    <form method="post" action="productview.jsp">
         
         <div class="container">
         
@@ -37,7 +46,7 @@
 			        while(rs1.next())
 			        {   
 			            
-			            String p="F://Final/Stuff/WebContent/File_upload/book/";
+			            String p="F://Final/Stuff/WebContent/Upload/book/";
 			            String pic=rs1.getString(1);
 			            String p3=new String(p+pic+".jpg");
 			            System.out.println(p3);
@@ -53,11 +62,12 @@
 			                            fout.write(barr);              
 			                            fout.close();
 			                        %>
-						<img src="File_upload\book\<%=pic%>.jpg" alt="<%=rs1.getString(5)%>">
+						<img src="Upload/book/<%= pic %>.jpg" alt="<%=rs1.getString(5)%>" width="500" height="500">
 			                            <div class="caption">
-							<a href="./productview.jsp?table=book&id=<%=rs1.getInt(1)%>" ><%= rs1.getString(5)%></a>
+							<a href="productview.jsp?table=book&id=<%=rs1.getInt(1)%>" ><%= rs1.getString(5)%></a>
 			                            </div>
 			                    </div>
+			                   
 					</div>
 			            
 			    
@@ -65,8 +75,8 @@
 			               }
 			        rs1.close();
 			       %>
-			                        </div>
-				</div>
+			     </div>
+		</div>
           
                         
         
@@ -82,7 +92,7 @@
         while(rs2.next())
         {   
             
-            String p="F://Final/Stuff/WebContent/File_upload/laptop/";
+            String p="F://Final/Stuff/WebContent/Upload/laptop/";
             String pic=rs2.getString(1);
             String p3=new String(p+pic+".jpg");
             System.out.println(p3);
@@ -98,9 +108,9 @@
                             fout.write(barr);              
                             fout.close();
                         %>
-			<img src="File_upload\laptop\<%=pic%>.jpg" alt="<%=rs2.getString(5)%>" >
+			<img src="Upload/laptop/<%=rs2.getString(1)%>.jpg" alt="<%=rs2.getString(5)%>">
                             <div class="caption">
-				 <a href="./productview.jsp?table=laptop&id=<%=rs2.getInt(1)%>" ><%= rs2.getString(5)%></a>
+				 <a href="./productview.jsp?table=laptop&id=<%=rs2.getString(1)%>" ><%= rs2.getString(5) %></a>
                             </div>
                     </div>
 		</div>
@@ -127,7 +137,7 @@
         while(rs3.next())
         {   
             
-            String p="F://Final/Stuff/WebContent/File_upload/notes/";
+            String p="F://Final/Stuff/WebContent/Upload/notes/";
             String pic=rs3.getString(1);
             String p3=new String(p+pic+".jpg");
             System.out.println(p3);
@@ -143,9 +153,9 @@
                             fout.write(barr);              
                             fout.close();
                         %>
-			<img src="File_upload\notes\<%=pic%>.jpg" alt="<%=rs3.getString(5)%>">
+			<img src="Upload/notes/<%=rs3.getString(1)%>.jpg" alt="<%=rs3.getString(5)%>">
                             <div class="caption">
-				 <a href="./productview.jsp?table=notes&id=<%=rs3.getInt(1)%>" ><%= rs3.getString(5)%></a>
+				 <a href="./productview.jsp?table=notes&id=<%=rs3.getString(1)%>" ><%= rs3.getString(5)%></a>
                             </div>
                     </div>
 		</div>
@@ -170,7 +180,7 @@
         while(rs4.next())
         {   
             
-            String p="F://Final/Stuff/WebContent/File_upload/project/";
+            String p="F://Final/Stuff/WebContent/Upload/project/";
             String pic=rs4.getString(1);
             String p3=new String(p+pic+".jpg");
             System.out.println(p3);
@@ -186,9 +196,9 @@
                             fout.write(barr);              
                             fout.close();
                         %>
-			<img src="File_upload\project\<%=pic%>.jpg" alt="<%=rs4.getString(5)%>" >
+			<img src="Upload/project/<%=rs4.getString(1)%>.jpg" alt="<%=rs4.getString(5)%>" >
                             <div class="caption">
-				 <a href="./productview.jsp?table=project&id=<%=rs4.getInt(1)%>" ><%= rs4.getString(5)%></a>
+				 <a href="./productview.jsp?table=project&id=<%=rs4.getString(1)%>" ><%= rs4.getString(5)%></a>
                             </div>
                     </div>
 		</div>

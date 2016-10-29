@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,9 +31,10 @@ public class ResetPassword extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		String user=(String)request.getParameter("user");
-        String otp=(String)request.getParameter("otp");
+        String uotp=(String)request.getParameter("otp");
         String pwd=(String)request.getParameter("set");
         String cpwd=(String)request.getParameter("confirm");
+        String otp=(String)request.getParameter("otp1");
         String msg=""+otp;
         
         System.out.println("---------Reset Password ---------------");
@@ -42,49 +44,64 @@ public class ResetPassword extends HttpServlet {
         System.out.println(cpwd);
         if(pwd.equals(cpwd))
         {
+        	if(otp.equals(uotp))
+        	{
             try{
                 Class.forName("oracle.jdbc.driver.OracleDriver");
                 Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","narayan","sah");
-                /*PreparedStatement pst=con.prepareStatement("update users set password=? where roll_no=?");
-                pst.setString(1,pwd);
-                pst.setString(2,user);*/
                 
                 Statement st=con.createStatement();
                 System.out.println("Enter");
                 int i=st.executeUpdate("update users set password='"+pwd+"' where roll_no='"+user+"'");
                
-               
-                
-                System.out.println("Out");
+              
                 con.commit();
                 if(i==1)
                 {
-                	System.out.println("Password Reset Successfully");
-                    response.sendRedirect("index.jsp");
+                	msg="Password Reset Successfully now you can login";
+                	request.setAttribute("Message",msg);
+                	RequestDispatcher rd=request.getRequestDispatcher("login.jsp");
+                    rd.forward(request, response);
                 }
                 else
                 {
-                	
-                	System.out.println("Password Reset Failed");
-                   //response.sendRedirect("setpassword.jsp?user="+user+"&msg="+msg);
+                	msg="Password not reset try again";
+                	request.setAttribute("Message",msg);
+                	RequestDispatcher rd=request.getRequestDispatcher("setpassword.jsp");
+                    rd.forward(request, response);
                 }
             }
             catch(SQLException se){
-            	System.out.println("Password Reset Failed");
-                //response.sendRedirect("index.jsp");
-                //Handle errors for JDBC
-                se.printStackTrace();
+            	
+            	msg="Password Reset Failed";
+            	request.setAttribute("Message",msg);
+            	RequestDispatcher rd=request.getRequestDispatcher("setpassword.jsp");
+                rd.forward(request, response);
              }catch(Exception e){
-                //Handle errors for Class.forName
+            	 msg="Password Reset Failed";
+             	request.setAttribute("Message",msg);
+             	RequestDispatcher rd=request.getRequestDispatcher("setpassword.jsp");
+                 rd.forward(request, response);
                 e.printStackTrace();
              }
         }
         else
         {
-            msg="Password and Confirm Password is not same";
-            System.out.println(msg);
-            response.sendRedirect("setpassword.jsp?user="+user+"&msg="+msg);
+        	msg="You have entered wrong OTP";
+        	request.setAttribute("Message",msg);
+        	request.setAttribute("otp",otp);
+        	RequestDispatcher rd=request.getRequestDispatcher("setpassword.jsp");
+            rd.forward(request, response);
         }
+        
+       }
+       else
+       {
+            msg="Password and Confirm Password is not same";
+            request.setAttribute("Message",msg);
+        	RequestDispatcher rd=request.getRequestDispatcher("setpassword.jsp");
+            rd.forward(request, response);
+       }
        
 	}
 
